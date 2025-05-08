@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Details - Computer Science Department</title>
+    <style>
+        :root {
+            --primary-color: #0b7a3e; /* Primary Green */
+            --secondary-color: #148f4c; /* Lighter Green */
+            --accent-color: #095c2f; /* Darker Green */
+            --background-color: #f9f9f9; /* Off-White */
+            --text-color: #333333;
+            --light-text: #ffffff;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .college-name {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+            opacity: 0.9;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 100%;
+            background-color: var(--light-text);
+            border-radius: 10px;
+        }
+
+        .login-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light-text);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-separator {
+            color: #666;
+        }
+
+        /* Notice Content */
+        .notice-container {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 2rem;
+        }
+
+        .notice-main {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .notice-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .notice-category-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background-color: #d32f2f;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .notice-category-badge.exams {
+            background-color: #d32f2f;
+        }
+
+        .notice-category-badge.events {
+            background-color: #7b1fa2;
+        }
+
+        .notice-category-badge.news {
+            background-color: #1976d2;
+        }
+
+        .notice-category-badge.results {
+            background-color: #388e3c;
+        }
+
+        .notice-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .notice-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .notice-content {
+            padding: 1.5rem;
+        }
+
+        .notice-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .notice-content h3 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--primary-color);
+        }
+
+        .notice-content ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .notice-content ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .notice-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .notice-file {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .file-details {
+            flex-grow: 1;
+        }
+
+        .file-name {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .file-size {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .download-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .notice-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .share-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            color: #555;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .share-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Sidebar */
+        .notice-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary-color);
+        }
+
+        .related-notices-list {
+            list-style: none;
+        }
+
+        .related-notice-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .related-notice-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .related-notice-title {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .related-notice-title a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .related-notice-title a:hover {
+            color: var(--primary-color);
+        }
+
+        .related-notice-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.3rem 0.8rem;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tag:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Contact Card */
+        .contact-card {
+            padding: 1rem;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .contact-person {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-title {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--light-text);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--light-text);
+            text-decoration: underline;
+        }
+
+        .contact-info p {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Action buttons */
+        .notice-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(11, 122, 62, 0.1);
+        }
+
+        /* Comments section */
+        .comments-section {
+            margin-top: 2rem;
+        }
+
+        .comments-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .comment {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1rem;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-author {
+            font-weight: 500;
+        }
+
+        .comment-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .comment-text {
+            font-size: 0.95rem;
+        }
+
+        .comment-form {
+            margin-top: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            nav ul {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            nav.active ul {
+                display: flex;
+            }
+
+            .header-container {
+                flex-wrap: wrap;
+            }
+
+            .notice-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .notice-title {
+                font-size: 1.5rem;
+            }
+            
+            .notice-meta {
+                flex-wrap: wrap;
+                gap: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="logo.jpg" alt="CS Dept Logo" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div>
+                    <div class="logo-text">CS Department Notice Board</div>
+                    <div class="college-name">Audu Bako College of Agriculture, Dambatta</div>
+                </div>
+            </div>
+            
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <nav id="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">Notices</a></li>
+                    <li><a href="#">Events</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="login.html" class="login-btn">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="breadcrumb-separator">></span>
+            <a href="#">Notices</a>
+            <span class="breadcrumb-separator">></span>
+            <a href="#">Exams</a>
+            <span class="breadcrumb-separator">></span>
+            <span>Final Examination Schedule Released</span>
+        </div>
+        
+        <!-- Notice Container -->
+        <div class="notice-container">
+            <!-- Main Notice Content -->
+            <div class="notice-main">
+                <div class="notice-header">
+                    <span class="notice-category-badge exams">Exams</span>
+                    <h1 class="notice-title">Final Examination Schedule Released</h1>
+                    <div class="notice-meta">
+                        <div class="meta-item">
+                            <span>Posted on: May 5, 2025</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>By: Examination Committee</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>Views: 238</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="notice-content">
+                    <p>The examination schedule for the second semester 2024/2025 academic session has been released. All students are advised to check their timetables and prepare accordingly.</p>
+                    
+                    <img src="/api/placeholder/800/400" alt="Examination Hall" class="notice-image">
+                    
+                    <h3>Important Information</h3>
+                    <p>The examinations will commence on <strong>May 20, 2025</strong> and end on <strong>June 5, 2025</strong>. All students are required to adhere to the following guidelines:</p>
+                    
+                    <ul>
+                        <li>Students must arrive at the examination venue at least 30 minutes before the scheduled time.</li>
+                        <li>Valid student ID cards must be displayed at all times during the examination.</li>
+                        <li>Electronic devices, except approved calculators, are strictly prohibited in the examination hall.</li>
+                        <li>Students with outstanding fees will not be allowed to sit for the examinations.</li>
+                        <li>If you have any examination clash in your timetable, report to the department office immediately.</li>
+                    </ul>
+                    
+                    <h3>Examination Timetable</h3>
+                    <p>The detailed examination timetable is available in the attached PDF document. Please download and review it carefully.</p>
+                    
+                    <div class="notice-file">
+                        <div class="file-icon">PDF</div>
+                        <div class="file-details">
+                            <div class="file-name">CS_Dept_Exam_Timetable_Second_Semester_2024_2025.pdf</div>
+                            <div class="file-size">1.2 MB</div>
+                        </div>
+                        <button class="download-btn">Download</button>
+                    </div>
+                    
+                    <h3>Special Arrangements</h3>
+                    <p>Students requiring special arrangements due to medical conditions or disabilities should contact the Examination Office as soon as possible with supporting documentation.</p>
+                    
+                    <h3>Study Resources</h3>
+                    <p>The department library will remain open extended hours (8:00 AM - 10:00 PM) from May 13 to June 5, 2025, to facilitate student study sessions. Additionally, all course materials and past examination papers are available on the department e-learning portal.</p>
+                    
+                    <div class="notice-actions">
+                        <a href="#" class="action-btn btn-outline">Print Notice</a>
+                        <a href="#" class="action-btn btn-primary">Download PDF</a>
+                    </div>
+                </div>
+                
+                <div class="notice-footer">
+                    <div class="share-buttons">
+                        <div class="share-btn">FB</div>
+                        <div class="share-btn">TW</div>
+                        <div class="share-btn">WA</div>
+                        <div class="share-btn">EM</div>
+                    </div>
+                </div>
+                
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <h3 class="comments-title">Comments (3)</h3>
+                    
+                    <div class="comment">
+                        <div class="comment-header">
+                            <div class="comment-author">Ahmad Ibrahim</div>
+                            <div class="comment-date">May 6, 2025 - 10:23 AM</div>
+                        </div>
+                        <div class="comment-text">
+                            Is there any information about the practical examinations for CSC301?
+                        </div>
+                    </div>
+                    
+                    <div class="comment">
+                        <div class="comment-header">
+                            <div class="comment-author">Fatima Mohammed</div>
+                            <div class="comment-date">May 6, 2025 - 11:45 AM</div>
+                        </div>
+                        <div class="comment-text">
+                            Thank you for providing the timetable early. Will the department arrange any review sessions before the exams?
+                        </div>
+                    </div>
+                    
+                    <div class="comment">
+                        <div class="comment-header">
+                            <div class="comment-author">Dr. Yusuf (Lecturer)</div>
+                            <div class="comment-date">May 6, 2025 - 2:15 PM</div>
+                        </div>
+                        <div class="comment-text">
+                            @Ahmad - Yes, practical examinations for CSC301 will be held on May 22. Details are in the schedule.
+                            <br><br>
+                            @Fatima - Yes, review sessions are scheduled for the week before exams. Check the department notice board for the schedule.
+                        </div>
+                    </div>
+                    
+                    <div class="comment-form">
+                        <h4>Leave a Comment</h4>
+                        <form>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Comment</label>
+                                <textarea id="comment" class="form-control" required></textarea>
+                            </div>
+                            <button type="submit" class="action-btn btn-primary">Submit Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="notice-sidebar">
+                <!-- Related Notices -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Related Notices</h3>
+                    <ul class="related-notices-list">
+                        <li class="related-notice-item">
+                            <div class="related-notice-title">
+                                <a href="#">Exam Preparation Workshop: Effective Study Techniques</a>
+                            </div>
+                            <div class="related-notice-date">April 30, 2025</div>
+                        </li>
+                        <li class="related-notice-item">
+                            <div class="related-notice-title">
+                                <a href="#">Library Extended Hours During Examination Period</a>
+                            </div>
+                            <div class="related-notice-date">April 28, 2025</div>
+                        </li>
+                        <li class="related-notice-item">
+                            <div class="related-notice-title">
+                                <a href="#">Important: Exam Registration Deadline</a>
+                            </div>
+                            <div class="related-notice-date">April 25, 2025</div>
+                        </li>
+                        <li class="related-notice-item">
+                            <div class="related-notice-title">
+                                <a href="#">Guidelines for Students with Outstanding Fees</a>
+                            </div>
+                            <div class="related-notice-date">April 22, 2025</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Tags -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Tags</h3>
+                    <div class="tags-list">
+                        <div class="tag">Examinations</div>
+                        <div class="tag">Timetable</div>
+                        <div class="tag">Second Semester</div>
+                        <div class="tag">2024/2025</div>
+                        <div class="tag">Academic</div>
+                    </div>
+                </div>
+                
+                <!-- Contact Information -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">For Inquiries</h3>
+                    <div class="contact-card">
+                        <div class="contact-person">Dr. Mohammed Ali</div>
+                        <div class="contact-title">Chairman, Examination Committee</div>
+                        <div class="contact-info-item">
+                            <span>Email: m.ali@abcad.edu.ng</span>
+                        </div>
+                        <div class="contact-info-item">
+                            <span>Phone: +234 802 345 6789</span>
+                        </div>
+                        <div class="contact-info-item">
+                            <span>Office: Room 112, CS Building</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>About Us</h3>
+                <p>The Computer Science Department at Audu Bako College of Agriculture, Dambatta is committed to providing quality education and fostering innovation in information technology.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Notices</a></li>
+                    <li><a href="#">Events</a></li>
+                    <li><a href="#">Staff Directory</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column contact-info">
+                <h3>Contact Us</h3>
+                <p>Computer Science Department</p>
+                <p>Audu Bako College of Agriculture</p>
+                <p>Dambatta, Kano State</p>
+                <p>Email: cs.dept@abcad.edu.ng</p>
+                <p>Phone: +234 801 234 5678</p>
+                
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">FB</a>
+                    <a href="#" aria-label="Twitter">TW</a>
+                    <a href="#" aria-label="LinkedIn">LN</a>
+                    <a href="#" aria-label="Instagram">IG</a>
+                </div>
+            </div>
+        </div>

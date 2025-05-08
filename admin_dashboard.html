@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CS Department</title>
+    <style>
+        :root {
+            --primary-color: #0b7a3e; /* Primary Green */
+            --secondary-color: #148f4c; /* Lighter Green */
+            --accent-color: #095c2f; /* Darker Green */
+            --background-color: #f9f9f9; /* Off-White */
+            --text-color: #333333;
+            --light-text: #ffffff;
+            --sidebar-bg: #1e2a38;
+            --sidebar-active: #0f151d;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: var(--light-text);
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .admin-info {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .admin-name {
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            padding: 1rem 0;
+        }
+
+        .menu-heading {
+            padding: 0.8rem 1.5rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+        }
+
+        .nav-item {
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--sidebar-active);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            text-align: center;
+        }
+
+        .nav-text {
+            font-size: 0.95rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: var(--text-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(11, 122, 62, 0.1);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #bd2130;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        /* Dashboard Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--hover-shadow);
+            transform: translateY(-3px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .stat-icon.exams {
+            background-color: #d32f2f;
+        }
+
+        .stat-icon.events {
+            background-color: #7b1fa2;
+        }
+
+        .stat-icon.news {
+            background-color: #1976d2;
+        }
+
+        .stat-icon.results {
+            background-color: #388e3c;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Content Tabs */
+        .content-tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.2rem;
+            cursor: pointer;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        /* Cards */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Notice Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table th {
+            font-weight: 600;
+            background-color: #f9f9f9;
+            color: #555;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-row:hover {
+            background-color: #f9f9f9;
+        }
+
+        .notice-title {
+            font-weight: 500;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: block;
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .notice-title:hover {
+            color: var(--primary-color);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .badge-exams {
+            background-color: #d32f2f;
+        }
+
+        .badge-events {
+            background-color: #7b1fa2;
+        }
+
+        .badge-news {
+            background-color: #1976d2;
+        }
+
+        .badge-results {
+            background-color: #388e3c;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #666;
+        }
+
+        .action-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .action-btn.edit:hover {
+            color: var(--primary-color);
+        }
+
+        .action-btn.delete:hover {
+            color: var(--danger-color);
+        }
+
+        .action-btn.view:hover {
+            color: var(--info-color);
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(11, 122, 62, 0.2);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.8rem center;
+            background-size: 16px;
+            padding-right: 2.5rem;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .file-upload {
+            position: relative;
+            display: block;
+            width: 100%;
+            border: 2px dashed #ddd;
+            border-radius: 4px;
+            padding: 2rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+        }
+
+        .file-upload input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .file-upload-text {
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .file-upload-text span {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .uploaded-files {
+            margin-top: 1rem;
+        }
+
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .remove-file {
+            color: var(--danger-color);
+            cursor: pointer;
+        }
+
+        /* Category Tags */
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-tag {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #ddd;
+        }
+
+        .category-tag.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .page-item {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .page-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .page-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Modal */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background-color: #f0f0f0;
+            color: var(--danger-color);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Media Queries */
+        @media (max-width: 992px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .sidebar-header {
+                padding: 1rem 0.5rem;
+            }
+            
+            .logo-container {
+                justify-content: center;
+            }
+            
+            .admin-info, .nav-text, .menu-heading {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .nav-item {
+                justify-content: center;
+                padding: 0.8rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-tabs {
+                overflow-x: auto;
+                width: 100%;
+                padding-bottom: 5px;
+            }
+            
+            .tab {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="/api/placeholder/40/40" alt="CS Dept Logo" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="logo-text">CS Dept</div>
+            </div>
+            <div class="admin-info">
+                <div class="admin-name">Admin Panel</div>
+                <div>Audu Bako College</div>
+            </div>
+        </div>
+        
+        <nav class="nav-menu">
+            <div class="menu-heading">Main</div>
+            <div class="nav-item active">
+                <div class="nav-icon">📊</div>
+                <div class="nav-text">Dashboard</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📢</div>
+                <div class="nav-text">Notices</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📅</div>
+                <div class="nav-text">Events</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-text">Results</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📰</div>
+                <div class="nav-text">News</div>
+            </div>
+            
+            <div class="menu-heading">Management</div>
+            <div class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-text">File Manager</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🔍</div>
+                <div class="nav-text">Analytics</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🔔</div>
+                <div class="nav-text">Notifications</div>
+            </div>
+            
+            <div class="menu-heading">Settings</div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-text">Account</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">⚙️</div>
+                <div class="nav-text">Settings</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🚪</div>
+                <div class="nav-text">Logout</div>
+            </div>
+        </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">Manage Notices</h1>
+            <div class="header-actions">
+                <button class="btn btn-primary" id="addNoticeBtn">
+                    <span>➕</span> Add New Notice
+                </button>
+            </div>
+        </div>
+        
+        <!-- Dashboard Stats -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon exams">📝</div>
+                </div>
+                <div class="stat-value">8</div>
+                <div class="stat-label">Exam Notices</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon events">🎪</div>
+                </div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Event Notices</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon news">📰</div>
+                </div>
+                <div class="stat-value">15</div>
+                <div class="stat-label">News Updates</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon results">📊</div>
+                </div>
+                <div class="stat-value">5</div>
+                <div class="stat-label">Result Notices</div>
+            </div>
+        </div>
+        
+        <!-- Notices Management -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">All Notices</h2>
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-sm">
+                        <span>🔄</span> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <!-- Filter Options -->
+                <div class="category-tags">
+                    <div class="category-tag active">All Notices</div>
+                    <div class="category-tag">
+                        <span class="badge badge-exams">E</span>
+                        Exams
+                    </div>
+                    <div class="category-tag">
+                        <span class="badge badge-events">E</span>
+                        Events
+                    </div>
+                    <div class="category-tag">
+                        <span class="badge badge-news">N</span>
+                        News
+                    </div>
+                    <div class="category-tag">
+                        <span class="badge badge-results">R</span>
+                        Results
+                    </div>
+                </div>
+                
+                <!-- Table -->
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Date Posted</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-row">
+                                <td>
+                                    <a href="#" class="notice-title">Final Examination Schedule Released</a>
+                                </td>
+                                <td>
+                                    <span class="badge badge-exams">Exams</span>
+                                </td>
+                                <td>May 5, 2025</td>
+                                <td>
+                                    <span class="badge" style="background-color: var(--success-color);">Published</span>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <div class="action-btn view">👁️</div>
+                                        <div class="action-btn edit">✏️</div>
+                                        <div class="action-btn delete">🗑️</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>
+                                    <a href="#" class="notice-title">Department Annual Cultural Festival</a>
+                                </td>
+                                <td>
+                                    <span class="badge badge-events">Events</span>
+                                </td>
+                                <td>April 30, 2025</td>
+                                <td>
+                                    <span class="badge" style="background-color: var(--success-color);">Published</span>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <div class="action-btn view">👁️</div>
+                                        <div class="action-btn edit">✏️</div>
+                                        <div class="action-btn delete">🗑️</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>
+                                    <a href="#" class="notice-title">First Semester Results Released</a>
+                                </td>
+                                <td>
+                                    <span class="badge badge-results">Results</span>
+                                </td>
+                                <td>April 28, 2025</td>
+                                <td>
+                                    <span class="badge" style="background-color: var(--success-color);">Published</span>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <div class="action-btn view">👁️</div>
+                                        <div class="action-btn edit">✏️</div>
+                                        <div class="action-btn delete">🗑️</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>
+                                    <a href="#" class="notice-title">New Research Grant Opportunities</a>
+                                </td>
+                                <td>
+                                    <span class="badge badge-news">News</span>
+                                </td>
+                                <td>April 25, 2025</td>
+                                <td>
+                                    <span class="badge" style="background-color: var(--success-color);">Published</span>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <div class="action-btn view">👁️</div>
+                                        <div class="action-btn edit">✏️</div>
+                                        <div class="action-btn delete">🗑️</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>
+                                    <a href="#" class="notice-title">Revised Timetable for Lab Sessions</a>
+                                </td>
+                                <td>
+                                    <span class="badge badge-news">News</span>
+                                </td>
+                                <td>April 22, 2025</td>
+                                <td>
+                                    <span class="badge" style="background-color: var(--warning-color);">Draft</span>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <div class="action-btn view">👁️</div>
+                                        <div class="action-btn edit">✏️</div>
+                                        <div class="action-btn delete">🗑️</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>
+                                    <a href="#" class="notice-title">Guest Lecture on AI Ethics</a>
+                                </td>
+                                <td>
+                                    <span class="badge badge-events">Events</span>
+                                </td>
+                                <td>April 20, 2025</td>
+                                <td>
+                                    <span class="badge" style="background-color: var(--success-color);">Published</span>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <div class="action-btn view">👁️</div>
+                                        <div class="action-btn edit">✏️</div>
+                                        <div class="action-btn delete">🗑️</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination">
+                    <div class="page-item">«</div>
+                    <div class="page-item active">1</div>
+                    <div class="page-item">2</div>
+                    <div class="page-item">3</div>
+                    <div class="page-item">»</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Notice Modal -->
+    <div class="modal-backdrop" id="addNoticeModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Notice</h2>
+                <div class="modal-close" id="closeModalBtn">×</div>
+            </div>
+            <div class="modal-body">
+                <form id="noticeForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="noticeTitle" class="form-label">Notice Title</label>
+                            <input type="text" id="noticeTitle" class="form-control" placeholder="Enter notice title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="noticeCategory" class="form-label">Category</label>
+                            <select id="noticeCategory" class="form-control" required>
+                                <option value="">Select category</option>
+                                <option value="exams">Exams</option>
+                                <option value="events">Events</option>
+                                <option value="news">News</option>
+                                <option value="results">Results</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="noticeContent" class="form-label">Content</label>
+                            <textarea id="noticeContent" class="form-control" placeholder="Enter notice content" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="noticeDate" class="form-label">Publish Date</label>
+                            <input type="date" id="noticeDate" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="noticeStatus" class="form-label">Status</label>
+                            <select id="noticeStatus" class="form-control" required>
+                                <option value="published">Published</option>
+                                <option value="draft">Draft</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">Attachments</label>
+                            <div class="file-upload">
+                                <input type="file" id="noticeAttachment" multiple>
+                                <div class="file-upload-icon">📎</div>
+                                <div class="file-upload-text">Drag & drop files here or <span>browse</span></div>
+                            </div>
+                            <div class="uploaded-files" id="uploadedFiles"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelNoticeBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveNoticeBtn">Save Notice</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const addNoticeBtn = document.getElementById('addNoticeBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelNoticeBtn = document.getElementById('cancelNoticeBtn');
+        const addNoticeModal = document.getElementById('addNoticeModal');
+        
+        // Show modal
+        addNoticeBtn.addEventListener('click', () => {
+            addNoticeModal.style.display = 'flex';
+        });
+        
+        // Hide modal
+        closeModalBtn.addEventListener('click', () => {
+            addNoticeModal.style.display = 'none';
+        });
+        
+        cancelNoticeBtn.addEventListener('click', () => {
+            addNoticeModal.style.display = 'none';
+        });
+        
+        // Close modal when clicking outside
+        addNoticeModal.addEventListener('click', (e) => {
+            if (e.target === addNoticeModal) {
+                addNoticeModal.style.display = 'none';
+            }
+        });
+        
+        // File upload preview
+        const fileInput = document.getElementById('noticeAttachment');
+        const uploadedFilesContainer = document.getElementById('uploadedFiles');
+        
+        fileInput.addEventListener('change', (e) => {
+            uploadedFilesContainer.innerHTML = '';
+            const files = e.target.files;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileExtension = file.name.split('.').pop().toLowerCase();
+                
+                const fileElement = document.createElement('div');
+                fileElement.className = 'uploaded-file';
+                
+                fileElement.innerHTML = `
+                    <div class="file-name">
+                        <div class="file-icon">${fileExtension}</div>
+                        <span>${file.name}</span>
+                    </div>
+                    <div class="remove-file">✕</div>
+                `;
+                
+                // Add remove file functionality
+                fileElement.querySelector('.remove-file').addEventListener('click', () => {
+                    fileElement.remove();
+                    // Note: This doesn't actually remove from the FileList, would need more complex handling
+                });
+                
+                uploadedFilesContainer.appendChild(fileElement);
+            }
+        });
+        
+        // Form submission
+        const noticeForm = document.getElementById('noticeForm');
+        const saveNoticeBtn = document.getElementById('saveNoticeBtn');
+        
+        saveNoticeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            if (noticeForm.checkValidity()) {
+                // Here you would typically submit the form data to your backend
+                alert('Notice saved successfully!');
+                addNoticeModal.style.display = 'none';
+                noticeForm.reset();
+                uploadedFilesContainer.innerHTML = '';
+            } else {
+                alert('Please fill in all required fields');
+            }
+        });
+        
+        // Category tag filtering
+        const categoryTags = document.querySelectorAll('.category-tag');
+        
+        categoryTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                categoryTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                
+                // Here you would typically filter the table based on the selected category
+                // For demo purposes, we'll just log the selected category
+                const category = tag.textContent.trim();
+                console.log(`Filtering by: ${category}`);
+            });
+        });
+        
+        // Table row actions
+        const viewButtons = document.querySelectorAll('.action-btn.view');
+        const editButtons = document.querySelectorAll('.action-btn.edit');
+        const deleteButtons = document.querySelectorAll('.action-btn.delete');
+        
+        viewButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('View notice');
+            });
+        });
+        
+        editButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Edit notice');
+            });
+        });
+        
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to delete this notice?')) {
+                    alert('Notice deleted');
+                    // Here you would typically remove the row or refresh the table
+                }
+            });
+        });
+        
+        // Pagination
+        const pageItems = document.querySelectorAll('.page-item');
+        
+        pageItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (!item.classList.contains('active')) {
+                    document.querySelector('.page-item.active').classList.remove('active');
+                    item.classList.add('active');
+                    // Here you would typically load the new page of results
+                }
+            });
+        });
+    </script>
+</body>
+</html>
